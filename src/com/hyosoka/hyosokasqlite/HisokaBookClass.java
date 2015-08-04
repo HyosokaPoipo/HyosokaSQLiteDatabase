@@ -29,4 +29,45 @@ public class HisokaBookClass {
 				+pengarang+ ", harga="+ harga + "]";
 	}
 	
+	
+	
+	public int getID()
+	{
+		return this.id;
+	}
+	
+	public String getJudul()
+	{
+		return this.judul;
+	}
+	
+	public String getPengarang()
+	{
+		return this.pengarang;
+	}
+	
+	public String getHarga()
+	{
+		return this.harga;
+	}
+	
+	public void setID(int mID)
+	{
+		this.id = mID;
+	}
+	
+	public void setJudul(String mJudul)
+	{
+		this.judul = mJudul;
+	}
+	
+	public void setPengarang(String mPengarang)
+	{
+		this.pengarang = mPengarang;
+	}
+	
+	public void setHarga(String mHarga)
+	{
+		this.harga = mHarga;
+	}
 }

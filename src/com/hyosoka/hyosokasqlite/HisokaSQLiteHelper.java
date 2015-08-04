@@ -1,9 +1,11 @@
 package com.hyosoka.hyosokasqlite;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 
@@ -30,7 +32,7 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		String perintah_create = "CREATE TABLE hisokaBook (" +
+		String perintah_create = "CREATE TABLE "+ TABLE_NAME +" (" +
 		"id INTEGER PRIMARY KEY AUTOINCREMENT, "+
 				"judul TEXT"+
 		"pengarang TEXT"+
@@ -48,5 +50,48 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 		// Kemudian create table yang baru lagi
 		this.onCreate(db);
 	}
+
+
+//*******************************ADD*******************************//
+	public void ADDtoDatabase(HisokaBookClass buku)
+	{
+		Log.i("Data Buku", buku.toString());
+		
+		//Ngedapatin referensi ke database
+		SQLiteDatabase HyosokaDB = this.getWritableDatabase();
+		
+		//ContentValue untuk masukin nilai baru ke database
+		ContentValues CV = new ContentValues();
+		CV.put(KEY_JUDUL,buku.getJudul());
+		CV.put(KEY_PENGARANG, buku.getPengarang());
+		CV.put(KEY_HARGA, buku.getHarga());
+		
+		//Terus diInsert
+		HyosokaDB.insert(TABLE_NAME, null, CV);
+		
+		//Trakhir close databasenya
+		HyosokaDB.close();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
 
 }
