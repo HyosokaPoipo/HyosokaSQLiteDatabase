@@ -2,15 +2,31 @@ package com.hyosoka.hyosokasqlite;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class SQLiteMainActivity extends ActionBarActivity {
 
+	HisokaSQLiteHelper HisokaSQLite;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sqlite_main);
+		
+		
+		HisokaSQLite = new HisokaSQLiteHelper(this);
+		HisokaSQLite.ADDtoDatabase(new HisokaBookClass(90,"Judul","Poipo","15000"));
+		
+		HisokaBookClass buku = HisokaSQLite.getBook(90);
+		if(buku != null){
+		Log.i("Judul", buku.getJudul());
+		Log.i("Pengarang", buku.getPengarang());
+		Log.i("Harga", buku.getHarga());
+		}else
+		{
+			Log.i("Buku", "Kosong");
+		}
 	}
 
 	@Override

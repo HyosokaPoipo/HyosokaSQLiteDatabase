@@ -29,19 +29,26 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 	private static final String KEY_HARGA = "harga";
 	private static final String [] COLUMNS = {KEY_ID, KEY_JUDUL, KEY_PENGARANG, KEY_HARGA};
 	
+	public HisokaSQLiteHelper(Context ctx)
+	{
+		super(ctx,NAMA_DATABASE, null, VERSI_DATABASE);
+	}	
+	
+	/*
 	public HisokaSQLiteHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		// TODO Auto-generated constructor stub
 	}
-
+   */
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		String perintah_create = "CREATE TABLE "+ TABLE_NAME +" (" +
-		"id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-				"judul TEXT"+
-		"pengarang TEXT"+
-				"harga TEXT )";
+		String perintah_create = "CREATE TABLE "+ TABLE_NAME +"(" +
+		"id INTEGER PRIMARY KEY, "+
+				"judul TEXT,"+
+		"pengarang TEXT,"+
+				"harga TEXT)";
 		
+		Log.i("PerintahCreate", perintah_create);
 		//ngebuat databasenya
 		db.execSQL(perintah_create);
 	}
@@ -66,12 +73,16 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 		
 		//ContentValue untuk masukin nilai baru ke database
 		ContentValues CV = new ContentValues();
+		CV.put(KEY_ID, buku.getID());
 		CV.put(KEY_JUDUL,buku.getJudul());
-		CV.put(KEY_PENGARANG, buku.getPengarang());
-		CV.put(KEY_HARGA, buku.getHarga());
+		CV.put(KEY_PENGARANG,buku.getPengarang());
+		CV.put(KEY_HARGA,buku.getHarga());
+		
+		
+		
 		
 		//Terus diInsert
-		HyosokaDB.insert(TABLE_NAME, null, CV);
+		if(HyosokaDB.insert(TABLE_NAME, null, CV) == -1) Log.i("InserFailed", "Add data error");
 		
 		//Trakhir close databasenya
 		HyosokaDB.close();
@@ -120,14 +131,23 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 				new String[]{String.valueOf(id)}, /*ID buku yang akan diambil*/
 				null, null, null);
 		
-		//Jika id yang dicari ada...
-		if(HisokaCursor != null) HisokaCursor.moveToFirst();
-		
 		HisokaBookClass buku = new HisokaBookClass();
-		buku.setID(Integer.parseInt(HisokaCursor.getString(0)));
-		buku.setJudul(HisokaCursor.getString(1));
-		buku.setPengarang(HisokaCursor.getString(2));
-		buku.setHarga(HisokaCursor.getString(3));
+		//Jika id yang dicari ada...
+		if(HisokaCursor != null)
+		{
+			HisokaCursor.moveToFirst();
+			
+			buku.setID(Integer.parseInt(HisokaCursor.getString(0)));
+			buku.setJudul(HisokaCursor.getString(1));
+			buku.setPengarang(HisokaCursor.getString(2));
+			buku.setHarga(HisokaCursor.getString(3));
+		}else
+		{
+			//Return g' ada klu yang dicari g' ada
+			buku = null;
+		}
+		
+		
 		
 		return buku;		
 	}

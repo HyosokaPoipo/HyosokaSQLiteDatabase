@@ -13,9 +13,10 @@ public class HisokaBookClass {
 		
 	}
 	
-	public HisokaBookClass(String jdl, String pngrng, String hrg)
+	public HisokaBookClass(int id, String jdl, String pngrng, String hrg)
 	{
 		super();
+		this.id = id;
 		this.judul = jdl;
 		this.pengarang = pngrng;
 		this.harga = hrg;
