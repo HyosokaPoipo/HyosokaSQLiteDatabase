@@ -1,7 +1,11 @@
 package com.hyosoka.hyosokasqlite;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -73,6 +77,105 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 		HyosokaDB.close();
 		
 	}
+	
+//***************************UPDATE BOOK****************************//
+	public int UpdateDatabase(HisokaBookClass buku)
+	{
+		SQLiteDatabase HyosokaDB = this.getWritableDatabase();
+		
+		ContentValues CV = new ContentValues();
+		CV.put(KEY_JUDUL,buku.getJudul());
+		CV.put(KEY_PENGARANG, buku.getPengarang());
+		CV.put(KEY_HARGA, buku.getHarga());
+		
+		//Updating...
+		int i = HyosokaDB.update(TABLE_NAME, CV, KEY_ID+" = ?", new String[]{String.valueOf(buku.getID())});
+		
+		HyosokaDB.close();
+		
+		//i disini adalah nomor baris yang diubah atau diupdate
+		return i;		
+	}
+	
+//***************************DELETE BOOK*****************************//
+	public void DeleteBook(HisokaBookClass buku)
+	{
+		SQLiteDatabase HisokaDB = this.getWritableDatabase();
+		
+		HisokaDB.delete(TABLE_NAME, KEY_ID+" =?",new String[]{String.valueOf(buku.getID())});
+		
+		HisokaDB.close();
+	}
+	
+
+//***************************GET INFO**********************************//
+	public HisokaBookClass getBook(int id)
+	{
+		SQLiteDatabase HisokaDB = this.getReadableDatabase();
+		
+		//Query
+		Cursor HisokaCursor  = HisokaDB.query(TABLE_NAME,/*Nama Table*/
+				COLUMNS,/*Nama Coloumn*/
+				" id = ?",/*Seleksi*/
+				new String[]{String.valueOf(id)}, /*ID buku yang akan diambil*/
+				null, null, null);
+		
+		//Jika id yang dicari ada...
+		if(HisokaCursor != null) HisokaCursor.moveToFirst();
+		
+		HisokaBookClass buku = new HisokaBookClass();
+		buku.setID(Integer.parseInt(HisokaCursor.getString(0)));
+		buku.setJudul(HisokaCursor.getString(1));
+		buku.setPengarang(HisokaCursor.getString(2));
+		buku.setHarga(HisokaCursor.getString(3));
+		
+		return buku;		
+	}
+	
+//****************************GET ALL BOOOKS*****************************//
+	public List<HisokaBookClass> getAllBooks()
+	{
+		List<HisokaBookClass> listBuku = new LinkedList<HisokaBookClass>();
+		
+		String query = "SELECT * FROM "+ TABLE_NAME;
+		
+		SQLiteDatabase HisokaDB = this.getWritableDatabase();
+		Cursor kursor = HisokaDB.rawQuery(query, null);
+		
+		//Looping utk ngambil semua data2 datal database
+		HisokaBookClass buku = null;
+		if(kursor.moveToFirst())
+		{
+			do{
+				buku = new HisokaBookClass();
+				buku.setID(Integer.parseInt(kursor.getString(0)));
+				buku.setJudul(kursor.getString(1));
+				buku.setPengarang(kursor.getString(2));
+				buku.setHarga(kursor.getString(3));
+				
+				//Masukin infonya ke listBuku
+				listBuku.add(buku);
+			}while(kursor.moveToNext());
+		}
+		
+		return listBuku;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
