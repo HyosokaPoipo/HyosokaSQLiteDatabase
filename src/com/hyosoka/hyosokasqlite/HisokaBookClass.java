@@ -22,6 +22,13 @@ public class HisokaBookClass {
 		this.harga = hrg;
 	}
 	
+	public HisokaBookClass(String jdl, String pngrng, String hrg)
+	{
+		super();		
+		this.judul = jdl;
+		this.pengarang = pngrng;
+		this.harga = hrg;
+	}
 	
 	@Override
 	public String toString()
@@ -29,9 +36,7 @@ public class HisokaBookClass {
 		return "HisokaBook [id=" +id +", judul= "+ judul +", pengarang="
 				+pengarang+ ", harga="+ harga + "]";
 	}
-	
-	
-	
+		
 	public int getID()
 	{
 		return this.id;

@@ -56,7 +56,7 @@ public class HisokaSQLiteHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Buang tablenya klu udah ada
-		db.execSQL("DROP TABLE IF EXISTS hisokaBook");
+		db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
 		
 		// Kemudian create table yang baru lagi
 		this.onCreate(db);
